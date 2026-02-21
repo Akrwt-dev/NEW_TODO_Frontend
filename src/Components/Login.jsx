@@ -1,31 +1,48 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/Const";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isLogIn, setIsLogIn] = useState(true);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
-  const [age, setAge] = useState(true);
-  const [gender, setGender] = useState(true);
+  const [firstName, setFirstName] = useState("Anuj");
+  const [lastName, setLastName] = useState("Pundir");
+  const [emailId, setEmailId] = useState("anuj@gmail.com");
+  const [password, setPassword] = useState("Anuj@123");
+  const [age, setAge] = useState("20");
+  const [gender, setGender] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogIn = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const res = await axios.post(
         BASE_URL + "/login",
         { emailId, password },
-        { withCredentials: true },
+        { withCredentials: true }
       );
       dispatch(addUser(res.data));
-      return navigate("/");
+      navigate("/");
     } catch (error) {
-      setError(error?.response?.data || "Login failed");
+      setError(error?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleSignUp = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const res = await axios.post(
         BASE_URL + "/signup",
         {
@@ -33,21 +50,26 @@ const Login = () => {
           lastName,
           emailId,
           password,
+          age,
+          gender,
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
+
       dispatch(addUser(res.data.data));
-      return navigate("/profile");
+      navigate("/profile");
     } catch (error) {
-      setError(error?.response?.data || "Login failed");
+      setError(error?.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-1/4 h-2/4 border p-4  m-auto my-40">
-        <legend className="fieldset-legend w-1/4 text-4xl text-center ">
-          {isLogIn ? "Login" : "SignUp"}
+    <div className="flex justify-center items-center min-h-screen bg-base-100">
+      <fieldset className="bg-base-200 border border-base-300 rounded-xl w-full max-w-md p-6 shadow-lg">
+        <legend className="text-3xl font-bold text-center mb-4">
+          {isLogIn ? "Login" : "Sign Up"}
         </legend>
 
         {!isLogIn && (
@@ -56,7 +78,7 @@ const Login = () => {
             <input
               type="text"
               value={firstName}
-              className="input w-full"
+              className="input input-bordered w-full mb-3"
               onChange={(e) => setFirstName(e.target.value)}
             />
 
@@ -64,18 +86,18 @@ const Login = () => {
             <input
               type="text"
               value={lastName}
-              className="input w-full"
+              className="input input-bordered w-full mb-3"
               onChange={(e) => setLastName(e.target.value)}
             />
           </>
         )}
 
-        <label className="label">Email ID</label>
+        <label className="label">Email</label>
         <input
           type="email"
           value={emailId}
-          className="input w-full"
-          placeholder="Email"
+          className="input input-bordered w-full mb-3"
+          placeholder="Enter email"
           onChange={(e) => setEmailId(e.target.value)}
         />
 
@@ -85,30 +107,21 @@ const Login = () => {
             <input
               type="number"
               value={age}
-              className="input w-full"
+              className="input input-bordered w-full mb-3"
               onChange={(e) => setAge(e.target.value)}
             />
 
             <label className="label">Gender</label>
-            <div className="dropdown">
-              <div tabIndex={0} role="button" className="btn m-1">
-                {!gender ? "Select Gender" : gender}
-              </div>
-              <ul
-                tabIndex="-1"
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-              >
-                <li>
-                  <a onClick={() => setGender("Male")}>Male</a>
-                </li>
-                <li>
-                  <a onClick={() => setGender("Female")}>Female</a>
-                </li>
-                <li>
-                  <a onClick={() => setGender("Other")}>Other</a>
-                </li>
-              </ul>
-            </div>
+            <select
+              className="select select-bordered w-full mb-3"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </>
         )}
 
@@ -116,25 +129,33 @@ const Login = () => {
         <input
           type="password"
           value={password}
-          className="input w-full"
-          placeholder="Password"
+          className="input input-bordered w-full mb-3"
+          placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
-          className="btn btn-neutral mt-4"
+          className="btn btn-neutral w-full mt-2"
           onClick={isLogIn ? handleLogIn : handleSignUp}
+          disabled={loading}
         >
-          {isLogIn ? "Log In" : "Submit"}
+          {loading ? "Please wait..." : isLogIn ? "Log In" : "Sign Up"}
         </button>
+
+        {error && (
+          <p className="text-red-500 text-center mt-3">{error}</p>
+        )}
+
         <p
-          className="m-auto cursor-pointer py-2"
+          className="text-center mt-4 cursor-pointer text-sm text-primary"
           onClick={() => setIsLogIn((prev) => !prev)}
         >
-          {isLogIn ? "New user? Sign-Up" : "Existing User: Log-In"}
+          {isLogIn
+            ? "New user? Sign Up"
+            : "Already have an account? Log In"}
         </p>
       </fieldset>
-    </>
+    </div>
   );
 };
 
