@@ -1,43 +1,104 @@
-import React, { useEffect } from "react";
 import axios from "axios";
+import React from "react";
+import { BASE_URL } from "../utils/Const";
+import { useDispatch } from "react-redux";
+import { removeTask } from "../utils/taskSlice";
+import todoIcon from "../assets/to-do-list.png";
 
-const Task = () => {
-  const allTask = async () => {
-    const task = await axios.get("http://localhost:4000/health", {
-      withCredentials: true,
-    });
+const Task = ({ task }) => {
+  const {
+    title,
+    description,
+    completed,
+    dueDate,
+    priority,
+    _id,
+    remainingDays,
+    photoURL,
+  } = task;
+  const dispatch = useDispatch();
+
+  const deleteTask = async () => {
+    try {
+      await axios.delete(`${BASE_URL}/delete/${_id}`, {
+        withCredentials: true,
+      });
+      dispatch(removeTask(_id));
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+  const getStatus = () => {
+    if (task.remainingDays < 0) return "overdue";
+    if (task.remainingDays === 0) return "today";
+    return "upcoming";
+  };
+  const statusStyles = {
+    overdue: "border-l-4 border-red-500 bg-red-50",
+    today: "border-l-4 border-yellow-500 bg-yellow-50",
+    upcoming: "border-l-4 border-green-500 bg-green-50",
   };
 
+  const status = getStatus();
+
   return (
-    <div className="mx-10 my-10 rounded-4xl">
+    <div className={`mx-10 my-6 rounded-4xl ${statusStyles[status]}`}>
       <ul className="list bg-base-100 rounded-box shadow-md">
         <li className="list-row">
           <div>
             <img
               className="size-15 rounded-box"
-              src="https://img.daisyui.com/images/profile/demo/1@94.webp"
+              src={photoURL || todoIcon}
+              alt="task"
             />
           </div>
-          <div>
-            <div className="text-2xl">Dio Lupa</div>
-            <div className="text-xs uppercase font-semibold opacity-60">
-              Remaining Reason
-            </div>
-          </div>
-          <p className="list-col-wrap text-xs">
-            "Remaining Reason" became an instant hit, praised for its haunting
-            sound and emotional depth. A viral performance brought it widespread
-            recognition, making it one of Dio Lupa’s most iconic tracks.
-          </p>
 
-          <button className="btn btn-square btn-ghost">
+          <div>
+            <div className="text-2xl">{title}</div>
+            <div className="text-xs uppercase font-semibold opacity-60">
+              {new Date(dueDate).toLocaleDateString("en-CA")} • {priority}
+            </div>
+
+            <span
+              className={`badge mt-1 ${
+                status === "overdue"
+                  ? "badge-error"
+                  : status === "today"
+                    ? "badge-warning"
+                    : "badge-success"
+              }`}
+            >
+              {status}
+            </span>
+          </div>
+
+          <p className="list-col-wrap text-s">{description}</p>
+          <button className="btn btn-square btn-ghost" onClick={deleteTask}>
             <svg
               className="size-[1.2em]"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 26 26"
-              fill="currentColor"
             >
-              <path d="M 13 0.1875 C 5.925781 0.1875 0.1875 5.925781 0.1875 13 C 0.1875 20.074219 5.925781 25.8125 13 25.8125 C 20.074219 25.8125 25.8125 20.074219 25.8125 13 C 25.8125 5.925781 20.074219 0.1875 13 0.1875 Z M 18.78125 17.394531 L 17.390625 18.78125 C 17.136719 19.035156 16.722656 19.035156 16.46875 18.78125 L 13 15.3125 L 9.53125 18.78125 C 9.277344 19.035156 8.863281 19.035156 8.609375 18.777344 L 7.21875 17.394531 C 6.96875 17.136719 6.96875 16.726563 7.21875 16.46875 L 10.6875 13 L 7.222656 9.535156 C 6.96875 9.277344 6.96875 8.863281 7.222656 8.609375 L 8.609375 7.222656 C 8.863281 6.964844 9.28125 6.964844 9.535156 7.222656 L 13 10.6875 L 16.46875 7.222656 C 16.722656 6.964844 17.140625 6.964844 17.390625 7.222656 L 18.78125 8.605469 C 19.035156 8.863281 19.035156 9.277344 18.78125 9.535156 L 15.3125 13 L 18.78125 16.46875 C 19.03125 16.726563 19.03125 17.136719 18.78125 17.394531 Z" />
+              <circle cx="13" cy="13" r="12.5" fill="#ef4444" />
+
+              <path
+                d="M9.2 9.2C9.45 8.95 9.85 8.95 10.1 9.2L13 12.1L15.9 9.2C16.15 8.95 16.55 8.95 16.8 9.2L17.8 10.2C18.05 10.45 18.05 10.85 17.8 11.1L14.9 14L17.8 16.9C18.05 17.15 18.05 17.55 17.8 17.8L16.8 18.8C16.55 19.05 16.15 19.05 15.9 18.8L13 15.9L10.1 18.8C9.85 19.05 9.45 19.05 9.2 18.8L8.2 17.8C7.95 17.55 7.95 17.15 8.2 16.9L11.1 14L8.2 11.1C7.95 10.85 7.95 10.45 8.2 10.2L9.2 9.2Z"
+                fill="white"
+              />
+            </svg>
+          </button>
+          <button className="btn btn-square btn-ghost" onClick={deleteTask}>
+            <svg
+              className="size-[1.2em]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 26 26"
+            >
+              <circle cx="13" cy="13" r="12.5" fill="#22c55e" />
+
+              <path
+                d="M10.3 17.6L6.9 14.2C6.65 13.95 6.65 13.55 6.9 13.3L8.1 12.1C8.35 11.85 8.75 11.85 9 12.1L10.75 13.85L17 7.6C17.25 7.35 17.65 7.35 17.9 7.6L19.1 8.8C19.35 9.05 19.35 9.45 19.1 9.7L11.2 17.6C10.95 17.85 10.55 17.85 10.3 17.6Z"
+                fill="white"
+              />
             </svg>
           </button>
         </li>

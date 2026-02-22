@@ -4,8 +4,11 @@ import { BASE_URL } from "../utils/Const";
 import { useDispatch } from "react-redux";
 import { addTask } from "../utils/taskSlice";
 
+
+
 const AddTask = () => {
   const [title, setTitle] = useState("");
+  const [photoURL, setPhotoURL] = useState("")
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("medium");
@@ -21,6 +24,7 @@ const AddTask = () => {
           description,
           dueDate,
           priority,
+          photoURL,
         },
         { withCredentials: true },
       );
@@ -30,6 +34,7 @@ const AddTask = () => {
       setDescription("")
       setDueDate("")
       setPriority("medium")
+      setPhotoURL("")
     } catch (err) {
       setError(err?.response?.data?.message || "Failed to add Task");
       console.log(err);
@@ -66,7 +71,7 @@ const AddTask = () => {
             placeholder="Enter the title"
             onChange={(e) => setDueDate(e.target.value)}
           />
-          <label className="label">Priority</label>
+          <label className="label text-2xl">Priority</label>
           <select
             className="select select-bordered w-full mb-3 textarea-info text-xl"
             value={priority}
@@ -79,6 +84,15 @@ const AddTask = () => {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
+          <label className="label text-2xl">Photo URL</label>
+          <input
+            type="Text"
+            value={photoURL}
+            className="input input-bordered w-full textarea-info text-xl"
+            placeholder="Enter the Photo URL"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
           {error && <p className="text-red-500 text-center mt-3">{error}</p>}
           <button className="btn btn-neutral mt-6 w-full" onClick={addYourTask}>
             Add Task
