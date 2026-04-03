@@ -28,7 +28,6 @@ const AddTask = () => {
         },
         { withCredentials: true },
       );
-      console.log(res.data.data);
       dispatch(addTask(res.data.data));
       setTitle("")
       setDescription("")

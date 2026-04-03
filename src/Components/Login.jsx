@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/Const";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addUser } from "../utils/userSlice";
 
@@ -67,7 +67,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-base-100">
-      <fieldset className="bg-base-200 border border-base-300 rounded-xl w-full max-w-md p-6 shadow-lg">
+      <fieldset className="bg-base-200 border border-base-300 rounded-xl w-full max-w-md p-6 shadow-lg mb-72">
         <legend className="text-3xl font-bold text-center mb-4">
           {isLogIn ? "Login" : "Sign Up"}
         </legend>

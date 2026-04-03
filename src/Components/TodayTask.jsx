@@ -8,7 +8,7 @@ import { addTask, setTasks } from "../utils/taskSlice";
 const TodayTask = () => {
   const dispatch = useDispatch();
   const [selectedPriority, setSelectedPriority] = useState("all");
-  const [taskView, setTaskView] = useState("today");
+  const [taskView, setTaskView] = useState("all");
   const tasks = useSelector((store) => store.task.tasks);
   const visibleTasks = (tasks || []).filter((task) => {
     if (taskView === "today" && task.remainingDays !== 0) {
@@ -42,8 +42,8 @@ const TodayTask = () => {
           value={taskView}
           onChange={(e) => setTaskView(e.target.value)}
         >
-          <option value="today">Today Tasks</option>
           <option value="all">All Tasks</option>
+          <option value="today">Today Tasks</option>
         </select>
         <select
           className="select select-bordered ml-11 mt-5 rounded-4xl"

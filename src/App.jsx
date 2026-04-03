@@ -3,14 +3,19 @@ import Login from "./Components/Login";
 import Body from "./Components/Body";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import Profile from "./Components/Profile";
+import Home from "./Components/Home";
 
 function App() {
   return (
     <Provider store={appStore}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Body />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Body />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />\
+          </Route>
         </Routes>
       </BrowserRouter>
     </Provider>
