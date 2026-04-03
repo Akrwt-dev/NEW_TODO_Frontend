@@ -7,11 +7,11 @@ import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isLogIn, setIsLogIn] = useState(true);
-  const [firstName, setFirstName] = useState("Anuj");
-  const [lastName, setLastName] = useState("Pundir");
-  const [emailId, setEmailId] = useState("anuj@gmail.com");
-  const [password, setPassword] = useState("Anuj@123");
-  const [age, setAge] = useState("20");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
