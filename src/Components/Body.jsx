@@ -8,7 +8,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import Header from "./Header";
 
-
 const Body = () => {
   const userData = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -32,14 +31,13 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="h-screen w-screen ">
-      <div className="h-full">
-        <div className="h-1/5">
-          <Header />
-        </div>
-        <div className="flex-1">
-        <Outlet />
+    <div className="min-h-screen w-full bg-base-200">
+      <div className="max-w-7xl mx-auto px-4 py-3">
+        <Header />
       </div>
+
+      <div className="max-w-7xl mx-auto px-4 pb-6">
+        <Outlet />
       </div>
     </div>
   );

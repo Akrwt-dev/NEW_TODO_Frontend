@@ -42,81 +42,96 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <div className="card bg-neutral text-neutral-content w-1/2 m-auto mt-20 ">
-      <div className="card-body items-center text-center">
-        <div className="card card-side bg-base-100 shadow-sm bg-black p-10">
-          <figure className=" mr-10">
-            <img
-              className="w-96 h-96"
-              src={pURL || PROFILE_PIC}
-              alt="Profile Picture"
-            />
-          </figure>
-          <fieldset className="fieldset border-black  w-xs border p-4 bg-black ml-10">
-            <label className="label">First Name </label>
-            <input
-              type="text"
-              value={fName}
-              className="input"
-              placeholder="My awesome page"
-              onChange={(e) => setFName(e.target.value)}
-            />
-
-            <label className="label">Last Name</label>
-            <input
-              type="text"
-              className="input"
-              value={lName}
-              placeholder="my-awesome-page"
-              onChange={(e) => setLName(e.target.value)}
-            />
-            <label className="label">Age</label>
-            <input
-              type="number"
-              value={a}
-              className="input input-bordered w-full mb-3"
-              onChange={(e) => setA(e.target.value)}
-            />
-
-            <label className="label">Gender</label>
-            <select
-              className="select select-bordered w-full mb-3"
-              value={g}
-              onChange={(e) => setG(e.target.value)}
-            >
-              <option value="" disabled hidden>
-                Select Gender
-              </option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <label className="label">Photo URL</label>
-            <input
-              type="text"
-              className="input"
-              placeholder="Name"
-              value={pURL}
-              onChange={(e) => setPURL(e.target.value)}
-            />
-            <button
-              className="btn btn-neutral bg-gray-900 mt-6 w-full"
-              onClick={updateProfile}
-            >
-              Update Profile
-            </button>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-          </fieldset>
+    <div className="max-w-4xl mx-auto mt-12 px-4">
+      <div className="bg-base-300 rounded-2xl shadow-md p-6 flex gap-6 items-start">
+        <div className="flex flex-col items-center">
+          <img
+            className="w-32 h-32 rounded-xl object-cover"
+            src={pURL || PROFILE_PIC}
+            alt="Profile"
+          />
+          <p className="text-xs mt-2 opacity-60">Preview</p>
         </div>
-        {showToast && (
-          <div className="toast toast-top toast-center">
-            <div className="alert alert-success">
-              <span>Profile saved successfully.</span>
+
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm">First Name</label>
+              <input
+                type="text"
+                value={fName}
+                className="input input-bordered w-full text-sm mt-1"
+                onChange={(e) => setFName(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm">Last Name</label>
+              <input
+                type="text"
+                value={lName}
+                className="input input-bordered w-full text-sm mt-1"
+                onChange={(e) => setLName(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm">Age</label>
+              <input
+                type="number"
+                value={a}
+                className="input input-bordered w-full text-sm mt-1"
+                onChange={(e) => setA(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm">Gender</label>
+              <select
+                className="select select-bordered w-full text-sm mt-1"
+                value={g}
+                onChange={(e) => setG(e.target.value)}
+              >
+                <option value="" disabled hidden>
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
           </div>
-        )}
+
+          <div className="mt-4">
+            <label className="text-sm">Photo URL</label>
+            <input
+              type="text"
+              value={pURL}
+              className="input input-bordered w-full text-sm mt-1"
+              onChange={(e) => setPURL(e.target.value)}
+            />
+          </div>
+
+          <button
+            className="btn btn-neutral mt-5 w-full text-sm"
+            onClick={updateProfile}
+          >
+            Update Profile
+          </button>
+
+          {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
+        </div>
       </div>
+
+      {showToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success text-sm">
+            <span>Profile saved successfully.</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

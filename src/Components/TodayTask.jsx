@@ -34,19 +34,21 @@ const TodayTask = () => {
   }, []);
 
   return (
-    <div className="bg-base-300 h-[calc(100vh-2rem)] mx-5 rounded-4xl overflow-hidden ml-10">
-      <h1 className="text-4xl pt-5 pl-10">Task</h1>
-      <div className="px-10 mt-4 flex gap-4">
+    <div className="bg-base-300 h-[calc(100vh-2rem)] mx-5 rounded-2xl overflow-hidden ml-8">
+      <h1 className="text-2xl pt-5 pl-6 font-semibold">Tasks</h1>
+
+      <div className="px-6 mt-3 flex gap-3">
         <select
-          className="select select-bordered mt-5 rounded-4xl"
+          className="select select-bordered text-sm rounded-xl"
           value={taskView}
           onChange={(e) => setTaskView(e.target.value)}
         >
           <option value="all">All Tasks</option>
           <option value="today">Today Tasks</option>
         </select>
+
         <select
-          className="select select-bordered ml-11 mt-5 rounded-4xl"
+          className="select select-bordered text-sm rounded-xl"
           value={selectedPriority}
           onChange={(e) => setSelectedPriority(e.target.value)}
         >
@@ -56,10 +58,11 @@ const TodayTask = () => {
           <option value="high">High</option>
         </select>
       </div>
-      <div className="w-full h-full">
-        <div className="box-border border-b-cyan-400">
+
+      <div className="w-full h-full px-6 mt-4">
+        <div className="border-t border-base-200 pt-4">
           {visibleTasks.length === 0 ? (
-            <p className="text-center text-lg opacity-70 mt-10">
+            <p className="text-center text-sm opacity-60 mt-8">
               No tasks found
             </p>
           ) : (
